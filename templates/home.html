@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+{% block title %}Home - JKT48 Fans{% endblock %}
+{% block content %}
+<h2>Home - Daftar Fans & Pembelian Merchandise</h2>
+<p>Halo, <strong>{{ username }}</strong>! Berikut daftar fans yang terdaftar di sistem:</p>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in tugas_2 %}
+      <tr>
+        <td>{{ u.id }}</td>
+        <td>{{ u.username }}</td>
+        <td>{{ u.email }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr>
+<h4>Pembelian Merchandise</h4>
+<p>Silahkan pilih siapa oshi kamu ><</p>
+<div class="card mb-3" style="max-width:540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="\static\images\Shani_Indira_Natio.jpg" class="img-fluid rounded-start" alt="Merch" >
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">JKT48 Birthday T-Shirt Shani Indira Natio</h5>
+        <p class="card-text">Harga: Rp 120.000</p>
+        <p class="card-text"><small class="text-muted">Stok: 10</small></p>
+        <a class="btn btn-success btn-sm">Beli Sekarang</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-3" style="max-width:540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="\static\images\anindya_ramadhani.jpg" class="img-fluid rounded-start" alt="Merch">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">JKT48 Birthday T-Shirt Anindya Ramadhani</h5>
+        <p class="card-text">Harga: Rp 120.000</p>
+        <p class="card-text"><small class="text-muted">Stok: 10</small></p>
+        <a class="btn btn-success btn-sm">Beli Sekarang</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

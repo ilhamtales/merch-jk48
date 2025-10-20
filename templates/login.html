@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block title %}Login - JKT48 Fans{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h2 class="mb-3">Login Fans JKT48</h2>
+    <form method="post">
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input class="form-control" name="username" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input class="form-control" type="password" name="password" required>
+      </div>
+      <button class="btn btn-primary" type="submit">Login</button>
+      <a class="btn btn-link" href="{{ url_for('register') }}">Belum punya akun? Register</a>
+    </form>
+
+    <hr>
+    <p class="text-muted small">Catatan: Website ini menyimpan password dalam bentuk hash di database. Masukkan akun dan password anda sekarang.</p>
+  </div>
+</div>
+{% endblock %}
