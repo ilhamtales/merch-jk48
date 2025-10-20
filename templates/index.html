@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JKT48 Fans - Simulasi Login/Register</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .container { max-width: 600px; margin-top: 40px; }
+    .pointer { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">JKT48 Fans</a>
+      <div id="nav-items" class="d-flex ms-auto"></div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="alert-placeholder"></div>
+
+    <!-- Register Form -->
+    <div id="register-section" style="display:none;">
+      <h2>Daftar Fans JKT48</h2>
+      <form id="register-form">
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input class="form-control" type="text" id="reg-username" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input class="form-control" type="email" id="reg-email" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input class="form-control" type="password" id="reg-password" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Confirm Password</label>
+          <input class="form-control" type="password" id="reg-confirm" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+        <button type="button" id="to-login" class="btn btn-link">Sudah punya akun? Login</button>
+      </form>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-section" style="display:none;">
+      <h2>Login Fans JKT48</h2>
+      <form id="login-form">
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input class="form-control" type="text" id="login-username" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input class="form-control" type="password" id="login-password" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Login</button>
+        <button type="button" id="to-register" class="btn btn-link">Belum punya akun? Register</button>
+      </form>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home-section" style="display:none;">
+      <h2>Home - Daftar Fans & Pembelian Merchandise</h2>
+      <p>Halo, <strong id="home-username"></strong>! Berikut daftar fans yang terdaftar di sistem:</p>
+      <table class="table table-striped" id="users-table">
+        <thead>
+          <tr><th>ID</th><th>Username</th><th>Email</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <hr>
+      <h4>Pembelian Merchandise</h4>
+      <p>Silahkan pilih siapa oshi kamu &gt;&lt;</p>
+
+      <div class="card mb-3" style="max-width:540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="https://i.imgur.com/5tj6S7Ol.jpg" class="img-fluid rounded-start" alt="Merch" />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">JKT48 Birthday T-Shirt Shani Indira Natio</h5>
+              <p class="card-text">Harga: Rp 120.000</p>
+              <p class="card-text"><small class="text-muted">Stok: 10</small></p>
+              <button class="btn btn-success btn-sm" onclick="alert('Terima kasih sudah membeli!')">Beli Sekarang</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3" style="max-width:540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="https://i.imgur.com/0Z8ZxW3l.jpg" class="img-fluid rounded-start" alt="Merch" />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">JKT48 Birthday T-Shirt Anindya Ramadhani</h5>
+              <p class="card-text">Harga: Rp 120.000</p>
+              <p class="card-text"><small class="text-muted">Stok: 10</small></p>
+              <button class="btn btn-success btn-sm" onclick="alert('Terima kasih sudah membeli!')">Beli Sekarang</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Helper to generate random ID
+  function generateId() {
+    return Math.random().toString(36).substr(2, 10);
+  }
+
+  // Show alert messages
+  function showAlert(message, type='success') {
+    const alertPlaceholder = document.getElementById('alert-placeholder');
+    alertPlaceholder.innerHTML = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>`;
+  }
+
+  // Show/hide sections
+  function showSection(section) {
+    ['login-section','register-section','home-section'].forEach(s => {
+      document.getElementById(s).style.display = s === section ? 'block' : 'none';
+    });
+    document.getElementById('alert-placeholder').innerHTML = '';
+    updateNavbar();
+  }
+
+  // Update navbar buttons
+  function updateNavbar() {
+    const nav = document.getElementById('nav-items');
+    const username = localStorage.getItem('loggedInUser');
+    if (username) {
+      nav.innerHTML = `
+        <span class="nav-link">Hello, ${username}</span>
+        <a href="#" class="nav-link pointer" id="logout-btn">Logout</a>
+      `;
+      document.getElementById('logout-btn').onclick = () => {
+        localStorage.removeItem('loggedInUser');
+        showAlert('Berhasil logout!', 'success');
+        showSection('login-section');
+      }
+    } else {
+      nav.innerHTML = `
+        <a href="#" class="nav-link pointer" id="nav-login">Login</a>
+        <a href="#" class="nav-link pointer" id="nav-register">Register</a>
+      `;
+      document.getElementById('nav-login').onclick = () => showSection('login-section');
+      document.getElementById('nav-register').onclick = () => showSection('register-section');
+    }
+  }
+
+  // Get users list from localStorage
+  function getUsers() {
+    const users = localStorage.getItem('users');
+    return users ? JSON.parse(users) : [];
+  }
+
+  // Save user to localStorage
+  function saveUser(user) {
+    const users = getUsers();
+    users.push(user);
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+
+  // Render users table
+  function renderUsers() {
+    const users = getUsers();
+    const tbody = document.querySelector('#users-table tbody');
+    tbody.innerHTML = '';
+    users.forEach(user => {
+      tbody.innerHTML += `<tr>
+        <td>${user.id}</td><td>${user.username}</td><td>${user.email}</td>
+      </tr>`;
+    });
+  }
+
+  // Register form submit
+  document.getElementById('register-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const username = document.getElementById('reg-username').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const confirm = document.getElementById('reg-confirm').value;
+
+    if (password !== confirm) {
+      showAlert('Password tidak cocok!', 'danger');
+      return;
+    }
+
+    // Check if username or email exists
+    const users = getUsers();
+    if(users.some(u => u.username === username)) {
+      showAlert('Username sudah digunakan!', 'danger');
+      return;
+    }
+    if(users.some(u => u.email === email)) {
+      showAlert('Email sudah digunakan!', 'danger');
+      return;
+    }
+
+    const user = {
+      id: generateId(),
+      username,
+      email,
+      password // Simpel: tidak di-hash, karena ini cuma demo lokal
+    };
+    saveUser(user);
+    showAlert('Registrasi berhasil! Silakan login.', 'success');
+    showSection('login-section');
+    document.getElementById('register-form').reset();
+  });
+
+  // Login form submit
+  document.getElementById('login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    const users = getUsers();
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if (!user) {
+      showAlert('Username atau password salah!', 'danger');
+      return;
+    }
+
+    localStorage.setItem('loggedInUser', user.username);
+    showAlert('Login berhasil!', 'success');
+    document.getElementById('login-form').reset();
+    showHome();
+  });
+
+  // Show home page
+  function showHome() {
+    showSection('home-section');
+    const username = localStorage.getItem('loggedInUser');
+    document.getElementById('home-username').textContent = username;
+    renderUsers();
+  }
+
+  // Navigation buttons
+  document.getElementById('to-register').onclick = () => {
+    showSection('register-section');
+  };
+  document.getElementById('to-login').onclick = () => {
+    showSection('login-section');
+  };
+
+  // On page load
+  window.onload = () => {
+    if(localStorage.getItem('loggedInUser')){
+      showHome();
+    } else {
+      showSection('login-section');
+    }
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
